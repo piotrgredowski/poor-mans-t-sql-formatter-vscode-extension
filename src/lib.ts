@@ -2,20 +2,6 @@ import * as vscode from 'vscode';
 import { TextEditor } from 'vscode';
 const sqlFormatter = require('poor-mans-t-sql-formatter');
 
-/* work:
- - options - integration / manual testing
- - VSCode env/integration concerns
-   - options nesting (std formatter options, obfuscation / minifier options) -> maybe not possible, see https://github.com/editor-rs/vscode-rust/issues/341
-   - dynamically defined options list (to avoid hardcoding in this extension) -> maybe not possible
-   - menu "when" expression syntax to add plaintext option
-   - menu "when" expression syntax to add plaintext option to context menu
-   - title context and explorer context support fix
-   - UI language / translation
-   - Switch to "registerTextEditorCommand" rather than "registerCommand" (I couldn't figure out how to apply the edit in the handler so as to mess with the cursor selection afterwards)
-   - detect read-only buffers, warn or something to expolain why nothing is happening?
- - auto testing
- */
-
 export interface ISqlFormatterResult {
   errorFound: boolean;
   text: string;
