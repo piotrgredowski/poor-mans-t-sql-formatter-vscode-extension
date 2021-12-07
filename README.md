@@ -1,6 +1,6 @@
-# poor-mans-t-sql-formatter-vscode-extension README
+# poor-mans-t-sql-formatter-pg README
 
-This is the README for your extension "poor-mans-t-sql-formatter-vscode-extension". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "poor-mans-t-sql-formatter-pg". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 
