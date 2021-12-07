@@ -16,7 +16,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Install the dependencies
-        run: npm i
+        run: npm ci
 
       - name: Install vsce
         run: npm i -g vsce
