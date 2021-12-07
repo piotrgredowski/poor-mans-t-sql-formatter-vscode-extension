@@ -14,4 +14,5 @@ Extension can be found [here](https://marketplace.visualstudio.com/items?itemNam
 - [ ] Clean up code.
 - [ ] Add tests.
 - [ ] Add support for `Format selection`.
+- [ ] Provide better README.
 - [ ] Provide `pre-commit` task. Here or in another repository.
