@@ -1,7 +1,7 @@
 # Poor Man's T-SQL Formatter - VS Code Extension (PG)
 
 This repository is (at least for now) heavily inspired by [Poor Man's T-SQL Formatter - VS Code Extension](https://github.com/TaoK/poor-mans-t-sql-formatter-vscode-extension)
-authored by [Tao Klerks](https://github.com/TaoK).
+authored by [Tao Klerks](https://github.com/TaoK). Also some parts of code are exactly the same as ones in mentioned repositoy.
 
 Decision to create new VSCode Extension was driven by original extension being not maintained for last 3 years.
 Also current version of mentioned extension is not working with modern versions of VSCode.
