@@ -4,6 +4,7 @@ This repository is (at least for now) heavily inspired by [Poor Man's T-SQL Form
 authored by [Tao Klerks](https://github.com/TaoK).
 
 Decision to create new VSCode Extension was driven by original extension being not maintained for last 3 years.
+Also current version of mentioned extension is not working with modern versions of VSCode.
 
 ## Marketplace
 
