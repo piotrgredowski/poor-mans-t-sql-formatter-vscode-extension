@@ -15,5 +15,6 @@ Extension can be found [here](https://marketplace.visualstudio.com/items?itemNam
 - [ ] Clean up code.
 - [ ] Add tests.
 - [ ] Add support for `Format selection`.
+- [ ] Add support for taking configuration options from JSON/yaml file.
 - [ ] Provide better README.
 - [ ] Provide `pre-commit` task. Here or in another repository.
