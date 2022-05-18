@@ -1,221 +1,228 @@
 {
-	"name": "poor-mans-t-sql-formatter-pg",
-	"displayName": "poor-mans-t-sql-formatter-pg",
-	"description": "",
-	"version": "0.0.2",
-	"publisher": "piotrgredowski",
-	"repository": "https://github.com/piotrgredowski/poor-mans-t-sql-formatter-vscode-extension",
-	"engines": {
-		"vscode": "^1.62.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onCommand:poor-mans-t-sql-formatter-pg.formatSql",
-		"onLanguage:sql"
-	],
-	"main": "./dist/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "poor-mans-t-sql-formatter-pg.formatSql",
-				"title": "Poor Man's: Format SQL"
-			}
-		],
-		"menus": {
-			"commandPalette": [
-				{
-					"command": "poor-mans-t-sql-formatter-pg.formatSql",
-					"when": "editorFocus"
-				}
-			],
-			"editor/context": [
-				{
-					"when": "editorFocus && resourceLangId == sql",
-					"command": "poor-mans-t-sql-formatter-pg.formatSql",
-					"group": "1_modification"
-				}
-			],
-			"editor/title/context": [
-				{
-					"when": "editorFocus && resourceLangId == sql",
-					"command": "poor-mans-t-sql-formatter-pg.formatSql"
-				}
-			],
-			"explorer/context": [
-				{
-					"when": "editorFocus && resourceLangId == sql",
-					"command": "poor-mans-t-sql-formatter-pg.formatSql"
-				}
-			]
-		},
-		"keybindings": {
-			"command": "poor-mans-t-sql-formatter-pg.formatSql",
-			"key": "ctrl+k shift+f",
-			"when": "editorTextFocus"
-		},
-		"configuration": {
-			"type": "object",
-			"title": "Poor Man's SQL Formatting",
-			"properties": {
-				"poor-mans-t-sql-formatter-pg.confirmOnError": {
-					"type": "boolean",
-					"default": true,
-					"description": "If errors were encountered when parsing the SQL (and so the formatting is suspect) - should the formatter request confirmation before replacing the selected text with the formatted result?"
-				},
-				"poor-mans-t-sql-formatter-pg.expectedLanguages": {
-					"type": "array",
-					"default": [
-						"sql",
-						"plaintext"
-					],
-					"description": "If the programming language for the current Edit Window does not match one of these languages, then the formatter will request confirmation before formatting. Default expects SQL files or files with no detected/specified language (plaintext). Asterisk (*) to allow any language."
-				},
-				"poor-mans-t-sql-formatter-pg.errorOutputPrefix": {
-					"type": "string",
-					"default": "--WARNING! ERRORS ENCOUNTERED DURING SQL PARSING!\n",
-					"description": "Text to be included (in a comment at the top) if parsing failed and result is therefore suspect"
-				},
-				"poor-mans-t-sql-formatter-pg.dontInsertErrorOutput": {
-					"type": "string",
-					"default": true,
-					"description": "If value defined in `poor-mans-t-sql-formatter-pg.errorOutputPrefix` should be inserted into formatted SQL."
-				},
-				"poor-mans-t-sql-formatter-pg.formattingType": {
-					"type": "string",
-					"default": "standard",
-					"description": "What kind of formatting to do - 'standard' or 'obfuscation'",
-					"enum": [
-						"standard",
-						"obfuscation"
-					]
-				},
-				"poor-mans-t-sql-formatter-pg.std.indent": {
-					"type": "string",
-					"description": "Provide only if you want to override editor settings. The unit of indentation - typically a tab (\\t) or a number of spaces."
-				},
-				"poor-mans-t-sql-formatter-pg.std.spacesPerTab": {
-					"type": "number",
-					"default": 4,
-					"description": "This is used to measure line length, and only applies if you use tabs"
-				},
-				"poor-mans-t-sql-formatter-pg.std.maxLineWidth": {
-					"type": "number",
-					"default": 999,
-					"description": "Request that the formatter wrap long lines to avoid exceeding this line length"
-				},
-				"poor-mans-t-sql-formatter-pg.std.statementBreaks": {
-					"type": "number",
-					"default": 2,
-					"description": "How many linebreaks should be added when starting a new statement?"
-				},
-				"poor-mans-t-sql-formatter-pg.std.clauseBreaks": {
-					"type": "number",
-					"default": 1,
-					"description": "How many linebreaks should be added when starting a new clause within a statement?"
-				},
-				"poor-mans-t-sql-formatter-pg.std.expandCommaLists": {
-					"type": "boolean",
-					"default": true,
-					"description": "Should comma-delimited lists (columns, group by args, etc) be broken out onto new lines?"
-				},
-				"poor-mans-t-sql-formatter-pg.std.trailingCommas": {
-					"type": "boolean",
-					"default": true,
-					"description": "When starting a new line because of a comma, should the comma be at the end of line (VS the start of the next)?"
-				},
-				"poor-mans-t-sql-formatter-pg.std.spaceAfterExpandedComma": {
-					"type": "boolean",
-					"default": false,
-					"description": "Should a space be added after the comma? (typically not if they are 'trailing')"
-				},
-				"poor-mans-t-sql-formatter-pg.std.expandBooleanExpressions": {
-					"type": "boolean",
-					"default": true,
-					"description": "Should boolean operators (AND, OR) cause a linebreak?"
-				},
-				"poor-mans-t-sql-formatter-pg.std.expandCaseStatements": {
-					"type": "boolean",
-					"default": true,
-					"description": "Should CASE expressions have their WHEN and THEN expressions be broken out on new lines?"
-				},
-				"poor-mans-t-sql-formatter-pg.std.expandBetweenConditions": {
-					"type": "boolean",
-					"default": true,
-					"description": "Should BETWEEN expressions have the max argument broken out on a new line?"
-				},
-				"poor-mans-t-sql-formatter-pg.std.expandInLists": {
-					"type": "boolean",
-					"default": false,
-					"description": "Should IN() lists have each argument on a new line?"
-				},
-				"poor-mans-t-sql-formatter-pg.std.breakJoinOnSections": {
-					"type": "boolean",
-					"default": false,
-					"description": "Should the ON section of a JOIN clause be broken out onto its own line?"
-				},
-				"poor-mans-t-sql-formatter-pg.std.uppercaseKeywords": {
-					"type": "boolean",
-					"default": true,
-					"description": "Should T-SQL keywords (like SELECT, FROM) be automatically uppercased?"
-				},
-				"poor-mans-t-sql-formatter-pg.std.keywordStandardization": {
-					"type": "boolean",
-					"default": false,
-					"description": "Should less-common T-SQL keywords be replaced with their standard counterparts? (NOTE: only safe for T-SQL!)"
-				},
-				"poor-mans-t-sql-formatter-pg.min.randomizeKeywordCase": {
-					"type": "boolean",
-					"default": false,
-					"description": "Should the case of keywords be randomized, to minimize legibility?"
-				},
-				"poor-mans-t-sql-formatter-pg.min.randomizeLineLengths": {
-					"type": "boolean",
-					"default": false,
-					"description": "Should the SQL be wrapped at arbitrary intervals, to minimize legibility?"
-				},
-				"poor-mans-t-sql-formatter-pg.min.preserveComments": {
-					"type": "boolean",
-					"default": true,
-					"description": "Should comments in the code be retained (vs being stripped out)?"
-				},
-				"poor-mans-t-sql-formatter-pg.min.enableKeywordSubstitution": {
-					"type": "boolean",
-					"default": false,
-					"description": "Should keywords with synonyms use less common forms? (NOTE: only safe for T-SQL!)"
-				}
-			}
-		}
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run package",
-		"compile": "webpack",
-		"watch": "webpack --watch",
-		"package": "webpack --mode production --devtool hidden-source-map",
-		"compile-tests": "tsc -p . --outDir out",
-		"watch-tests": "tsc -p . -w --outDir out",
-		"pretest": "npm run compile-tests && npm run compile && npm run lint",
-		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/vscode": "^1.62.0",
-		"@types/glob": "^7.1.4",
-		"@types/mocha": "^9.0.0",
-		"@types/node": "14.x",
-		"@typescript-eslint/eslint-plugin": "^5.1.0",
-		"@typescript-eslint/parser": "^5.1.0",
-		"eslint": "^8.1.0",
-		"glob": "^7.1.7",
-		"mocha": "^9.1.3",
-		"typescript": "^4.4.4",
-		"ts-loader": "^9.2.5",
-		"webpack": "^5.52.1",
-		"webpack-cli": "^4.8.0",
-		"@vscode/test-electron": "^1.6.2"
-	},
-	"dependencies": {
-		"poor-mans-t-sql-formatter": "^1.6.10"
-	}
+  "name": "poor-mans-t-sql-formatter-pg",
+  "displayName": "poor-mans-t-sql-formatter-pg",
+  "description": "",
+  "version": "0.1.0",
+  "publisher": "piotrgredowski",
+  "repository": "https://github.com/piotrgredowski/poor-mans-t-sql-formatter-vscode-extension",
+  "engines": {
+    "vscode": "^1.62.0"
+  },
+  "categories": [
+    "Formatters"
+  ],
+  "keywords": [
+    "sql",
+    "postgres",
+    "t-sql",
+    "t-sql-formatter",
+    "poor-mans-t-sql-formatter"
+  ],
+  "activationEvents": [
+    "onCommand:poor-mans-t-sql-formatter-pg.formatSql",
+    "onLanguage:sql"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "poor-mans-t-sql-formatter-pg.formatSql",
+        "title": "Poor Man's: Format SQL"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "poor-mans-t-sql-formatter-pg.formatSql",
+          "when": "editorFocus"
+        }
+      ],
+      "editor/context": [
+        {
+          "when": "editorFocus && resourceLangId == sql",
+          "command": "poor-mans-t-sql-formatter-pg.formatSql",
+          "group": "1_modification"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "when": "editorFocus && resourceLangId == sql",
+          "command": "poor-mans-t-sql-formatter-pg.formatSql"
+        }
+      ],
+      "explorer/context": [
+        {
+          "when": "editorFocus && resourceLangId == sql",
+          "command": "poor-mans-t-sql-formatter-pg.formatSql"
+        }
+      ]
+    },
+    "keybindings": {
+      "command": "poor-mans-t-sql-formatter-pg.formatSql",
+      "key": "ctrl+k shift+f",
+      "when": "editorTextFocus"
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Poor Man's SQL Formatting",
+      "properties": {
+        "poor-mans-t-sql-formatter-pg.confirmOnError": {
+          "type": "boolean",
+          "default": true,
+          "description": "If errors were encountered when parsing the SQL (and so the formatting is suspect) - should the formatter request confirmation before replacing the selected text with the formatted result?"
+        },
+        "poor-mans-t-sql-formatter-pg.expectedLanguages": {
+          "type": "array",
+          "default": [
+            "sql",
+            "plaintext"
+          ],
+          "description": "If the programming language for the current Edit Window does not match one of these languages, then the formatter will request confirmation before formatting. Default expects SQL files or files with no detected/specified language (plaintext). Asterisk (*) to allow any language."
+        },
+        "poor-mans-t-sql-formatter-pg.errorOutputPrefix": {
+          "type": "string",
+          "default": "--WARNING! ERRORS ENCOUNTERED DURING SQL PARSING!\n",
+          "description": "Text to be included (in a comment at the top) if parsing failed and result is therefore suspect"
+        },
+        "poor-mans-t-sql-formatter-pg.dontInsertErrorOutput": {
+          "type": "string",
+          "default": true,
+          "description": "If value defined in `poor-mans-t-sql-formatter-pg.errorOutputPrefix` should be inserted into formatted SQL."
+        },
+        "poor-mans-t-sql-formatter-pg.formattingType": {
+          "type": "string",
+          "default": "standard",
+          "description": "What kind of formatting to do - 'standard' or 'obfuscation'",
+          "enum": [
+            "standard",
+            "obfuscation"
+          ]
+        },
+        "poor-mans-t-sql-formatter-pg.std.indent": {
+          "type": "string",
+          "description": "Provide only if you want to override editor settings. The unit of indentation - typically a tab (\\t) or a number of spaces."
+        },
+        "poor-mans-t-sql-formatter-pg.std.spacesPerTab": {
+          "type": "number",
+          "default": 4,
+          "description": "This is used to measure line length, and only applies if you use tabs"
+        },
+        "poor-mans-t-sql-formatter-pg.std.maxLineWidth": {
+          "type": "number",
+          "default": 999,
+          "description": "Request that the formatter wrap long lines to avoid exceeding this line length"
+        },
+        "poor-mans-t-sql-formatter-pg.std.statementBreaks": {
+          "type": "number",
+          "default": 2,
+          "description": "How many linebreaks should be added when starting a new statement?"
+        },
+        "poor-mans-t-sql-formatter-pg.std.clauseBreaks": {
+          "type": "number",
+          "default": 1,
+          "description": "How many linebreaks should be added when starting a new clause within a statement?"
+        },
+        "poor-mans-t-sql-formatter-pg.std.expandCommaLists": {
+          "type": "boolean",
+          "default": true,
+          "description": "Should comma-delimited lists (columns, group by args, etc) be broken out onto new lines?"
+        },
+        "poor-mans-t-sql-formatter-pg.std.trailingCommas": {
+          "type": "boolean",
+          "default": true,
+          "description": "When starting a new line because of a comma, should the comma be at the end of line (VS the start of the next)?"
+        },
+        "poor-mans-t-sql-formatter-pg.std.spaceAfterExpandedComma": {
+          "type": "boolean",
+          "default": false,
+          "description": "Should a space be added after the comma? (typically not if they are 'trailing')"
+        },
+        "poor-mans-t-sql-formatter-pg.std.expandBooleanExpressions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Should boolean operators (AND, OR) cause a linebreak?"
+        },
+        "poor-mans-t-sql-formatter-pg.std.expandCaseStatements": {
+          "type": "boolean",
+          "default": true,
+          "description": "Should CASE expressions have their WHEN and THEN expressions be broken out on new lines?"
+        },
+        "poor-mans-t-sql-formatter-pg.std.expandBetweenConditions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Should BETWEEN expressions have the max argument broken out on a new line?"
+        },
+        "poor-mans-t-sql-formatter-pg.std.expandInLists": {
+          "type": "boolean",
+          "default": false,
+          "description": "Should IN() lists have each argument on a new line?"
+        },
+        "poor-mans-t-sql-formatter-pg.std.breakJoinOnSections": {
+          "type": "boolean",
+          "default": false,
+          "description": "Should the ON section of a JOIN clause be broken out onto its own line?"
+        },
+        "poor-mans-t-sql-formatter-pg.std.uppercaseKeywords": {
+          "type": "boolean",
+          "default": true,
+          "description": "Should T-SQL keywords (like SELECT, FROM) be automatically uppercased?"
+        },
+        "poor-mans-t-sql-formatter-pg.std.keywordStandardization": {
+          "type": "boolean",
+          "default": false,
+          "description": "Should less-common T-SQL keywords be replaced with their standard counterparts? (NOTE: only safe for T-SQL!)"
+        },
+        "poor-mans-t-sql-formatter-pg.min.randomizeKeywordCase": {
+          "type": "boolean",
+          "default": false,
+          "description": "Should the case of keywords be randomized, to minimize legibility?"
+        },
+        "poor-mans-t-sql-formatter-pg.min.randomizeLineLengths": {
+          "type": "boolean",
+          "default": false,
+          "description": "Should the SQL be wrapped at arbitrary intervals, to minimize legibility?"
+        },
+        "poor-mans-t-sql-formatter-pg.min.preserveComments": {
+          "type": "boolean",
+          "default": true,
+          "description": "Should comments in the code be retained (vs being stripped out)?"
+        },
+        "poor-mans-t-sql-formatter-pg.min.enableKeywordSubstitution": {
+          "type": "boolean",
+          "default": false,
+          "description": "Should keywords with synonyms use less common forms? (NOTE: only safe for T-SQL!)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.62.0",
+    "@types/glob": "^7.1.4",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "14.x",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
+    "eslint": "^8.1.0",
+    "glob": "^7.1.7",
+    "mocha": "^9.1.3",
+    "typescript": "^4.4.4",
+    "ts-loader": "^9.2.5",
+    "webpack": "^5.52.1",
+    "webpack-cli": "^4.8.0",
+    "@vscode/test-electron": "^1.6.2"
+  },
+  "dependencies": {
+    "poor-mans-t-sql-formatter": "^1.6.10"
+  }
 }
