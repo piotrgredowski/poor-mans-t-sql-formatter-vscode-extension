@@ -19,46 +19,51 @@
     "poor-mans-t-sql-formatter"
   ],
   "activationEvents": [
-    "onCommand:poor-mans-t-sql-formatter-pg.formatSql",
+    "onCommand:poor-mans-t-sql-formatter-pg.poorFormatSql",
+    "onCommand:poor-mans-t-sql-formatter-pg.poorFormatSelectionSql",
     "onLanguage:sql"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "poor-mans-t-sql-formatter-pg.formatSql",
-        "title": "Poor Man's: Format SQL"
+        "command": "poor-mans-t-sql-formatter-pg.poorFormatSql",
+        "title": "Poor Man's SQL: Format SQL"
+      },
+      {
+        "command": "poor-mans-t-sql-formatter-pg.poorFormatSelectionSql",
+        "title": "Poor Man's SQL: Format selection"
       }
     ],
     "menus": {
       "commandPalette": [
         {
-          "command": "poor-mans-t-sql-formatter-pg.formatSql",
+          "command": "poor-mans-t-sql-formatter-pg.poorFormatSql",
           "when": "editorFocus"
         }
       ],
       "editor/context": [
         {
           "when": "editorFocus && resourceLangId == sql",
-          "command": "poor-mans-t-sql-formatter-pg.formatSql",
+          "command": "poor-mans-t-sql-formatter-pg.poorFormatSql",
           "group": "1_modification"
         }
       ],
       "editor/title/context": [
         {
           "when": "editorFocus && resourceLangId == sql",
-          "command": "poor-mans-t-sql-formatter-pg.formatSql"
+          "command": "poor-mans-t-sql-formatter-pg.poorFormatSql"
         }
       ],
       "explorer/context": [
         {
           "when": "editorFocus && resourceLangId == sql",
-          "command": "poor-mans-t-sql-formatter-pg.formatSql"
+          "command": "poor-mans-t-sql-formatter-pg.poorFormatSql"
         }
       ]
     },
     "keybindings": {
-      "command": "poor-mans-t-sql-formatter-pg.formatSql",
+      "command": "poor-mans-t-sql-formatter-pg.poorFormatSql",
       "key": "ctrl+k shift+f",
       "when": "editorTextFocus"
     },
