@@ -2,7 +2,7 @@
   "name": "poor-mans-t-sql-formatter-pg",
   "displayName": "poor-mans-t-sql-formatter-pg",
   "description": "",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "piotrgredowski",
   "repository": "https://github.com/piotrgredowski/poor-mans-t-sql-formatter-vscode-extension",
   "engines": {
