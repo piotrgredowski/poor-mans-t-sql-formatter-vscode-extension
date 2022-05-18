@@ -1,3 +1,6 @@
+[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/piotrgredowski.poor-mans-t-sql-formatter-pg?style=plastic)](https://marketplace.visualstudio.com/items?itemName=piotrgredowski.poor-mans-t-sql-formatter-pg)
+[![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/piotrgredowski.poor-mans-t-sql-formatter-pg?style=plastic)](https://marketplace.visualstudio.com/items?itemName=piotrgredowski.poor-mans-t-sql-formatter-pg)
+[![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/r/piotrgredowski.poor-mans-t-sql-formatter-pg?style=plastic)](https://marketplace.visualstudio.com/items?itemName=piotrgredowski.poor-mans-t-sql-formatter-pg)
 # Poor Man's T-SQL Formatter - VS Code Extension (PG)
 
 This repository is (at least for now) heavily inspired by [Poor Man's T-SQL Formatter - VS Code Extension](https://github.com/TaoK/poor-mans-t-sql-formatter-vscode-extension)
