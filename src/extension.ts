@@ -10,16 +10,19 @@ export function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, your extension "poor-mans-t-sql-formatter-pg" is now active!');
 
-  vscode.window.showInformationMessage(
-    'Hello World from poor-mans-t-sql-formatter-vscode-extension-pg!',
-  );
+  // vscode.window.showInformationMessage(
+  //   'aHello World from poor-mans-t-sql-formatter-vscode-extension-pg!',
+  // );
 
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand('poor-mans-t-sql-formatter-pg.formatSql', () => {
-    return formatDocument(false, undefined);
-  });
+  let disposable = vscode.commands.registerCommand(
+    'poor-mans-t-sql-formatter-pg.formatSql',
+    (a) => {
+      return formatDocument({} as vscode.FormattingOptions);
+    },
+  );
 
   context.subscriptions.push(disposable);
 
@@ -31,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
       const firstLine = document.lineAt(0);
       const lastLine = document.lineAt(document.lineCount - 1);
 
-      const result = formatDocument(options.insertSpaces, options.tabSize);
+      const result = formatDocument(options);
       if (result !== undefined) {
         return [
           vscode.TextEdit.replace(

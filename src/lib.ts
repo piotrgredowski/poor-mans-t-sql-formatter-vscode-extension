@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { TextEditor } from 'vscode';
+import { ExtensionOptions } from './extension-options';
 const sqlFormatter = require('poor-mans-t-sql-formatter');
 
 export interface ISqlFormatterResult {
@@ -18,20 +19,26 @@ function getWholeDocRange(doc: vscode.TextDocument) {
   );
 }
 
-function mergeInProperties(targetObject: any, sourceObject: any) {
-  for (var attrname in sourceObject) {
-    targetObject[attrname] = sourceObject[attrname];
-  }
-}
+function collectOptions(
+  extensionOptions: vscode.WorkspaceConfiguration,
+  editorOptions: vscode.FormattingOptions,
+): ExtensionOptions {
+  const options: ExtensionOptions = { ...extensionOptions.min, ...extensionOptions.std };
 
-function collectOptions(extensionOptions: vscode.WorkspaceConfiguration) {
-  var optionsReturn = {
-    errorOutputPrefix: extensionOptions.errorOutputPrefix,
-    formattingType: extensionOptions.formattingType,
-  };
-  mergeInProperties(optionsReturn, extensionOptions.min);
-  mergeInProperties(optionsReturn, extensionOptions.std);
-  return optionsReturn;
+  if (editorOptions.insertSpaces) {
+    if (editorOptions.tabSize) {
+      options.spacesPerTab = editorOptions.tabSize;
+      options.indent = ' '.repeat(editorOptions.tabSize);
+    }
+  } else {
+    editorOptions.indent = '\t';
+    editorOptions.spacesPerTab = editorOptions.tabSize;
+  }
+
+  if (options.dontInsertErrorOutput) {
+    options.errorOutputPrefix = '';
+  }
+  return options;
 }
 
 var commandDisposable: any;
@@ -53,7 +60,7 @@ function deactivate() {
 }
 exports.deactivate = deactivate;
 
-export function formatDocument(useSpaces: boolean, spacesPerTab: number | undefined = undefined) {
+export function formatDocument(editorFormattingOptions: vscode.FormattingOptions) {
   let editor = vscode.window.activeTextEditor as TextEditor;
   let document = editor.document;
   let useSelection = !editor.selection.isEmpty;
@@ -64,21 +71,7 @@ export function formatDocument(useSpaces: boolean, spacesPerTab: number | undefi
   let oldOffsetPercent = inputSql.length === 0 ? 0 : oldOffset / inputSql.length;
 
   let extensionSettingsObject = vscode.workspace.getConfiguration('poor-mans-t-sql-formatter-pg');
-  let options: any = collectOptions(extensionSettingsObject);
-  if (useSpaces) {
-    if (spacesPerTab) {
-      options.spacesPerTab = spacesPerTab;
-    }
-    options.indent = ' '.repeat(spacesPerTab || 4);
-    options.spacesPerTab = spacesPerTab;
-  } else {
-    options.indent = '\t';
-    options.spacesPerTab = spacesPerTab;
-  }
-
-  if (options.dontInsertErrorOutput) {
-    options.errorOutputPrefix = '';
-  }
+  let options = collectOptions(extensionSettingsObject, editorFormattingOptions);
 
   try {
     const formatDespiteMismatch = new Promise((resolve, reject) => {
