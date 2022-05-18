@@ -36,34 +36,23 @@ function collectOptions(
   return options;
 }
 
-var commandDisposable: any;
-
-function activate(context: any) {
-  commandDisposable = vscode.commands.registerCommand(
-    'poor-mans-t-sql-formatter-pg.formatSql',
-    () => {},
-  );
-
-  context.subscriptions.push(commandDisposable);
-}
-exports.activate = activate;
-
-function deactivate() {
-  if (commandDisposable) {
-    commandDisposable.dispose();
-  }
-}
-exports.deactivate = deactivate;
-
-export function formatDocument(editorFormattingOptions: vscode.FormattingOptions) {
+export function formatDocument(
+  editorFormattingOptions: vscode.FormattingOptions,
+  formatSelection: boolean,
+) {
   let editor = vscode.window.activeTextEditor as TextEditor;
   let document = editor.document;
-  let useSelection = !editor.selection.isEmpty;
-  let inputSql = useSelection ? document.getText(editor.selection) : document.getText();
 
-  const selectionRange = useSelection
-    ? new vscode.Range(editor.selection.start, editor.selection.end)
-    : getWholeDocRange(document);
+  let inputSql: string;
+  let selectionRange: vscode.Range;
+
+  if (formatSelection) {
+    inputSql = document.getText(editor.selection);
+    selectionRange = new vscode.Range(editor.selection.start, editor.selection.end);
+  } else {
+    inputSql = document.getText();
+    selectionRange = getWholeDocRange(document);
+  }
 
   let extensionSettingsObject = vscode.workspace.getConfiguration('poor-mans-t-sql-formatter-pg');
   let options = collectOptions(extensionSettingsObject, editorFormattingOptions);
@@ -99,7 +88,6 @@ export function formatDocument(editorFormattingOptions: vscode.FormattingOptions
     const result = sqlFormatter.formatSql(inputSql, options) as ISqlFormatterResult;
 
     return [vscode.TextEdit.replace(selectionRange, result.text)];
-
   } catch (e) {
     console.log(e);
     throw e;

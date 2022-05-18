@@ -1,26 +1,45 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { formatDocument } from './lib';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+let commandsDisposables: vscode.Disposable[] = [];
+
+function _format(shoudlFormatSelection: boolean) {
+  const { activeTextEditor } = vscode.window;
+  if (!!activeTextEditor && activeTextEditor.document.languageId === 'sql') {
+    const options = activeTextEditor.options;
+    const edit = formatDocument(options as vscode.FormattingOptions, shoudlFormatSelection);
+    if (!!edit) {
+      activeTextEditor.edit((editBuilder) => {
+        editBuilder.replace(edit[0].range, edit[0].newText);
+      });
+    }
+  }
+}
+function formatWhole() {
+  return _format(false);
+}
+function formatSelection() {
+  return _format(true);
+}
+
 export function activate(context: vscode.ExtensionContext) {
-  const disposable = vscode.commands.registerCommand(
-    'poor-mans-t-sql-formatter-pg.formatSql',
-    () => {
-      return formatDocument({} as vscode.FormattingOptions);
-    },
+  commandsDisposables.push(
+    vscode.commands.registerCommand('poor-mans-t-sql-formatter-pg.poorFormatSql', () => {
+      formatWhole();
+    }),
+    vscode.commands.registerCommand('poor-mans-t-sql-formatter-pg.poorFormatSelectionSql', () => {
+      formatSelection();
+    }),
   );
 
-  context.subscriptions.push(disposable);
+  context.subscriptions.push(...commandsDisposables);
 
   vscode.languages.registerDocumentFormattingEditProvider('sql', {
     provideDocumentFormattingEdits(
       document: vscode.TextDocument,
       options: vscode.FormattingOptions,
     ): vscode.TextEdit[] {
-      const result = formatDocument(options);
+      const result = formatDocument(options, false);
       if (result !== undefined) {
         return result;
       } else {
@@ -30,4 +49,8 @@ export function activate(context: vscode.ExtensionContext) {
   });
 }
 
-export function deactivate() {}
+export function deactivate() {
+  for (const commandDisposable of commandsDisposables) {
+    commandDisposable.dispose();
+  }
+}
