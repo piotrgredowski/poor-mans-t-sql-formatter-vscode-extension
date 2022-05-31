@@ -6,7 +6,7 @@
   "publisher": "piotrgredowski",
   "repository": "https://github.com/piotrgredowski/poor-mans-t-sql-formatter-vscode-extension",
   "engines": {
-    "vscode": "^1.62.0",
+    "vscode": ">=1.59.0",
     "azdata": "*"
   },
   "categories": [
@@ -213,7 +213,7 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.62.0",
+    "@types/vscode": ">=1.59.0",
     "@types/glob": "^7.1.4",
     "@types/mocha": "^9.0.0",
     "@types/node": "14.x",
