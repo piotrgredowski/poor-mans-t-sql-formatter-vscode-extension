@@ -5,3 +5,5 @@ node_modules
 *.vsix
 
 src/test/files/private*.sql
+
+.venv

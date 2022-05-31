@@ -1,0 +1,52 @@
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+name: Create Release
+
+env:
+  PACKAGE_NAME: poor-mans-t-sql-formatter-pg
+
+jobs:
+  autorelease:
+    name: Create Release
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install the dependencies
+        run: npm ci
+
+      - name: Install vsce
+        run: npm i -g vsce
+
+      - name: Release Notes
+        run: git log $(git describe HEAD~ --tags --abbrev=0)..HEAD --pretty='format:* %h %s%n  * %an <%ae>' --no-merges >> ".github/RELEASE-TEMPLATE.md"
+
+      - name: Add version to environment vars
+        run: |
+          PROJECT_VERSION=$(node -p "require('./package.json').version")
+          echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
+
+      - name: Build extension
+        run: vsce package
+
+      - name: Create Release Draft
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: '.github/RELEASE-TEMPLATE.md'
+          draft: true
+          files: |
+            ${{env.PACKAGE_NAME}}-${{env.PROJECT_VERSION}}.vsix
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
