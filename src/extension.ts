@@ -1,13 +1,17 @@
-import * as vscode from 'vscode';
-import { formatDocument } from './lib';
+import * as vscode from "vscode";
+import { askForStar } from "./begger";
+import { formatDocument } from "./lib";
 
 let commandsDisposables: vscode.Disposable[] = [];
 
 function _format(shoudlFormatSelection: boolean) {
   const { activeTextEditor } = vscode.window;
-  if (!!activeTextEditor && activeTextEditor.document.languageId === 'sql') {
+  if (!!activeTextEditor && activeTextEditor.document.languageId === "sql") {
     const options = activeTextEditor.options;
-    const edit = formatDocument(options as vscode.FormattingOptions, shoudlFormatSelection);
+    const edit = formatDocument(
+      options as vscode.FormattingOptions,
+      shoudlFormatSelection
+    );
     if (!!edit) {
       activeTextEditor.edit((editBuilder) => {
         editBuilder.replace(edit[0].range, edit[0].newText);
@@ -24,20 +28,26 @@ function formatSelection() {
 
 export function activate(context: vscode.ExtensionContext) {
   commandsDisposables.push(
-    vscode.commands.registerCommand('poor-mans-t-sql-formatter-pg.poorFormatSql', () => {
-      formatWhole();
-    }),
-    vscode.commands.registerCommand('poor-mans-t-sql-formatter-pg.poorFormatSelectionSql', () => {
-      formatSelection();
-    }),
+    vscode.commands.registerCommand(
+      "poor-mans-t-sql-formatter-pg.poorFormatSql",
+      () => {
+        formatWhole();
+      }
+    ),
+    vscode.commands.registerCommand(
+      "poor-mans-t-sql-formatter-pg.poorFormatSelectionSql",
+      () => {
+        formatSelection();
+      }
+    )
   );
 
   context.subscriptions.push(...commandsDisposables);
 
-  vscode.languages.registerDocumentFormattingEditProvider('sql', {
+  vscode.languages.registerDocumentFormattingEditProvider("sql", {
     provideDocumentFormattingEdits(
       document: vscode.TextDocument,
-      options: vscode.FormattingOptions,
+      options: vscode.FormattingOptions
     ): vscode.TextEdit[] {
       const result = formatDocument(options, false);
       if (result !== undefined) {
@@ -47,6 +57,8 @@ export function activate(context: vscode.ExtensionContext) {
       }
     },
   });
+
+  askForStar(context);
 }
 
 export function deactivate() {
