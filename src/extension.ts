@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import { askForStar } from "./begger";
 import { formatDocument } from "./lib";
 
 let commandsDisposables: vscode.Disposable[] = [];
@@ -57,8 +56,6 @@ export function activate(context: vscode.ExtensionContext) {
       }
     },
   });
-
-  askForStar(context);
 }
 
 export function deactivate() {
