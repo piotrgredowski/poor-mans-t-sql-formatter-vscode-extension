@@ -1,11 +1,12 @@
 enum FormattingType {
-  standard = 'standard',
-  obfuscation = 'obfuscation',
+  standard = "standard",
+  obfuscation = "obfuscation",
 }
 
 export interface ExtensionOptions {
   confirmOnError: boolean;
   expectedLanguages: string[];
+  dontWarnOnLanguageMismatch: boolean;
   errorOutputPrefix: string;
   dontInsertErrorOutput: boolean;
   formattingType: FormattingType;

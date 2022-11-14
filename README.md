@@ -1,6 +1,7 @@
 [![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/piotrgredowski.poor-mans-t-sql-formatter-pg?style=plastic)](https://marketplace.visualstudio.com/items?itemName=piotrgredowski.poor-mans-t-sql-formatter-pg)
 [![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/piotrgredowski.poor-mans-t-sql-formatter-pg?style=plastic)](https://marketplace.visualstudio.com/items?itemName=piotrgredowski.poor-mans-t-sql-formatter-pg)
 [![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/r/piotrgredowski.poor-mans-t-sql-formatter-pg?style=plastic)](https://marketplace.visualstudio.com/items?itemName=piotrgredowski.poor-mans-t-sql-formatter-pg)
+
 # Poor Man's T-SQL Formatter - VS Code Extension (PG)
 
 One of not too many, open source T-SQL formatters as an extension for VSCode.
@@ -27,7 +28,6 @@ Extension can be found [here](https://marketplace.visualstudio.com/items?itemNam
 ## TODO:
 
 - [x] Clean up code.
-- [x] Add support for `Format selection`.
 - [ ] Add tests to check if extension works for three latest minor versions of VSCode.
 - [ ] Provide better README.
 - [ ] Add support for taking configuration options from JSON/yaml file.

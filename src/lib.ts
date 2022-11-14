@@ -1,7 +1,7 @@
-import * as vscode from 'vscode';
-import { TextEditor } from 'vscode';
-import { ExtensionOptions } from './extension-options';
-const sqlFormatter = require('poor-mans-t-sql-formatter');
+import * as vscode from "vscode";
+import { TextEditor } from "vscode";
+import { ExtensionOptions } from "./extension-options";
+const sqlFormatter = require("poor-mans-t-sql-formatter");
 
 export interface ISqlFormatterResult {
   errorFound: boolean;
@@ -16,30 +16,33 @@ function getWholeDocRange(doc: vscode.TextDocument) {
 
 function collectOptions(
   extensionOptions: vscode.WorkspaceConfiguration,
-  editorOptions: vscode.FormattingOptions,
+  editorOptions: vscode.FormattingOptions
 ): ExtensionOptions {
-  const options: ExtensionOptions = { ...extensionOptions.min, ...extensionOptions.std };
+  const options: ExtensionOptions = {
+    ...extensionOptions.min,
+    ...extensionOptions.std,
+  };
 
   if (editorOptions.insertSpaces) {
     if (editorOptions.tabSize) {
       options.spacesPerTab = editorOptions.tabSize;
-      options.indent = ' '.repeat(editorOptions.tabSize);
+      options.indent = " ".repeat(editorOptions.tabSize);
     }
   } else {
-    editorOptions.indent = '\t';
+    editorOptions.indent = "\t";
     editorOptions.spacesPerTab = editorOptions.tabSize;
   }
 
   if (options.dontInsertErrorOutput) {
-    options.errorOutputPrefix = '';
+    options.errorOutputPrefix = "";
   }
   return options;
 }
 
 export function formatDocument(
   editorFormattingOptions: vscode.FormattingOptions,
-  formatSelection: boolean,
-) {
+  formatSelection: boolean
+): Promise<vscode.TextEdit[]> {
   let editor = vscode.window.activeTextEditor as TextEditor;
   let document = editor.document;
 
@@ -48,30 +51,42 @@ export function formatDocument(
 
   if (formatSelection) {
     inputSql = document.getText(editor.selection);
-    selectionRange = new vscode.Range(editor.selection.start, editor.selection.end);
+    selectionRange = new vscode.Range(
+      editor.selection.start,
+      editor.selection.end
+    );
   } else {
     inputSql = document.getText();
     selectionRange = getWholeDocRange(document);
   }
 
-  let extensionSettingsObject = vscode.workspace.getConfiguration('poor-mans-t-sql-formatter-pg');
-  let options = collectOptions(extensionSettingsObject, editorFormattingOptions);
+  let extensionSettingsObject = vscode.workspace.getConfiguration(
+    "poor-mans-t-sql-formatter-pg"
+  );
+  let options = collectOptions(
+    extensionSettingsObject,
+    editorFormattingOptions
+  );
 
   try {
     const formatDespiteMismatch = new Promise((resolve, reject) => {
       if (
+        !extensionSettingsObject.dontWarnOnLanguageMismatch &&
         extensionSettingsObject.expectedLanguages &&
         !extensionSettingsObject.expectedLanguages.find(
-          (l: any) => l === document.languageId || l === '*',
+          (l: any) => l === document.languageId || l === "*"
         )
       ) {
+        const yes = "Format Anyway";
+
         vscode.window
           .showWarningMessage(
             "The language of the file you are attempting to format does not match the formatter's configuration. Would you like to format anyway?",
-            'Format Anyway',
+            yes,
+            "Cancel"
           )
           .then((selectedAction) => {
-            if (selectedAction === 'Format Anyway') {
+            if (selectedAction === yes) {
               resolve(true);
             } else {
               resolve(false);
@@ -81,13 +96,18 @@ export function formatDocument(
         resolve(true);
       }
     });
-    if (!formatDespiteMismatch) {
-      return;
-    }
+    const result = formatDespiteMismatch.then((choice) => {
+      if (!choice) {
+        return [];
+      }
+      const result = sqlFormatter.formatSql(
+        inputSql,
+        options
+      ) as ISqlFormatterResult;
 
-    const result = sqlFormatter.formatSql(inputSql, options) as ISqlFormatterResult;
-
-    return [vscode.TextEdit.replace(selectionRange, result.text)];
+      return [vscode.TextEdit.replace(selectionRange, result.text)];
+    });
+    return result;
   } catch (e) {
     console.log(e);
     throw e;

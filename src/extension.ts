@@ -5,17 +5,19 @@ let commandsDisposables: vscode.Disposable[] = [];
 
 function _format(shoudlFormatSelection: boolean) {
   const { activeTextEditor } = vscode.window;
-  if (!!activeTextEditor && activeTextEditor.document.languageId === "sql") {
+  if (!!activeTextEditor) {
     const options = activeTextEditor.options;
-    const edit = formatDocument(
+    const editsPromise = formatDocument(
       options as vscode.FormattingOptions,
       shoudlFormatSelection
     );
-    if (!!edit) {
-      activeTextEditor.edit((editBuilder) => {
-        editBuilder.replace(edit[0].range, edit[0].newText);
-      });
-    }
+    editsPromise.then((edit) => {
+      if (!!edit) {
+        activeTextEditor.edit((editBuilder) => {
+          editBuilder.replace(edit[0].range, edit[0].newText);
+        });
+      }
+    });
   }
 }
 function formatWhole() {
@@ -44,16 +46,8 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(...commandsDisposables);
 
   vscode.languages.registerDocumentFormattingEditProvider("sql", {
-    provideDocumentFormattingEdits(
-      document: vscode.TextDocument,
-      options: vscode.FormattingOptions
-    ): vscode.TextEdit[] {
-      const result = formatDocument(options, false);
-      if (result !== undefined) {
-        return result;
-      } else {
-        return [];
-      }
+    provideDocumentFormattingEdits(_, options: vscode.FormattingOptions) {
+      return formatDocument(options, false);
     },
   });
 }

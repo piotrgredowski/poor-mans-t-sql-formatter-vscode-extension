@@ -85,6 +85,11 @@
           ],
           "description": "If the programming language for the current Edit Window does not match one of these languages, then the formatter will request confirmation before formatting. Default expects SQL files or files with no detected/specified language (plaintext). Asterisk (*) to allow any language."
         },
+        "poor-mans-t-sql-formatter-pg.dontWarnOnLanguageMismatch": {
+          "type": "boolean",
+          "default": false,
+          "description": "If formatter should warn user when formatting will be executed in different language then expected ones."
+        },
         "poor-mans-t-sql-formatter-pg.errorOutputPrefix": {
           "type": "string",
           "default": "--WARNING! ERRORS ENCOUNTERED DURING SQL PARSING!\n",
