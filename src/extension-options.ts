@@ -1,6 +1,6 @@
 enum FormattingType {
-  standard = "standard",
-  obfuscation = "obfuscation",
+  standard = 'standard',
+  obfuscation = 'obfuscation',
 }
 
 export interface ExtensionOptions {
@@ -10,7 +10,7 @@ export interface ExtensionOptions {
   errorOutputPrefix: string;
   dontInsertErrorOutput: boolean;
   formattingType: FormattingType;
-  indent: string;
+  indent: string | number;
   spacesPerTab: number;
   maxLineWidth: number;
   statementBreaks: number;
