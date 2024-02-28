@@ -6,6 +6,18 @@
 
 One of not too many, open source T-SQL formatters as an extension for VSCode.
 
+## **IMPORTANT NOTE**
+
+This extension is only to make it possible to use [Poor Man's T-SQL Formatter](https://github.com/TaoK/PoorMansTSqlFormatter) in VSCode.
+I am not going to modify source code and behavior of [Poor Man's T-SQL Formatter](https://github.com/TaoK/PoorMansTSqlFormatter) anyhow. Idea behind this extension is to make
+this great SQL formatter working with the current versions of VSCode and Azure Data Studio.
+
+If you'd have any problems with running this extension in any VSCode version - please raise an issue.
+
+But if you'd like to change how code is formatted and playing with provided extension's config options doesn't work - I won't be able to help with that.
+
+Cheers! ;)
+
 ## History
 
 This repository is (at least for now) heavily inspired by [Poor Man's T-SQL Formatter - VS Code Extension](https://github.com/TaoK/poor-mans-t-sql-formatter-vscode-extension)
